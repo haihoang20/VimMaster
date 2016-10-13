@@ -1,3 +1,3 @@
 # README #
 
-VimMaster: the best way to learn vim.
+VimMaster: The best way to learn vim.
