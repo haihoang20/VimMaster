@@ -1,82 +1,97 @@
-% noun_phrase(T0,T4,Ind,C0,C4) is true if
-%  T0 and T4 are list of words, such that
-%        T4 is an ending of T0
-%        the words in T0 before T4 (written T0-T4) form a noun phrase
-%  Ind is the individual that the noun phrase is referring to
-%  C0 and C4 are lists of relations such that
-%        C0 is an ending of C4 and
-%        the relations in C4-C0 give the constraints on Ind implied by the noun phrase
-% A noun phrase is a determiner followed by adjectives followed
-% by a noun followed by an optional modifying phrase:
-noun_phrase(T0,T4,Ind,C0,C4) :-
+% keyword_phrase(T0,T2,Ind,C0,C2) is true if
+%  T0 and T2 are list of words, such that
+%        T2 is an ending of T0
+%        the words in T0 before T2 (written T0-T2) form a keyword phrase
+%  Ind is the individual that the keyword phrase is referring to
+%  C0 and C2 are lists of relations such that
+%        C0 is an ending of C2 and
+%        the relations in C2-C0 give the constraints on Ind implied by the keyword phrase
+% A keyword phrase is a determiner followed by adjectives followed
+% by a keyword followed by an optional modifying phrase:
+keyword_phrase(T0,T4,Ind,C0,C4) :-
     det(T0,T1,Ind,C0,C1),
-    adjectives(T1,T2,Ind,C1,C2),
-    noun(T2,T3,Ind,C2,C3),
-    mp(T3,T4,Ind,C3,C4).
+    keyword(T1,T2,Ind,C1,C2),
+    connector(T2,T3,Ind,C2,C3),
+    keyword_phrase(T3,T4,Ind,C3,C4).
+keyword_phrase(T,T,_,C,C).
 
-% Try:
-%?- noun_phrase([a,tall,student],T1,I1,[],C1).
-%?- noun_phrase([a,math,course],T2,I2,[],C2).
-%?- noun_phrase([a,tall,student,enrolled,in,a,math,course],T3,I3,[],C3).
-
-% Determiners (articles) are ignored in this oversimplified example.
-% They do not provide any extra constaints.
+% Determiners (articles) are ignored.
+% % They do not provide any extra constaints.
 det([the | T],T,_,C,C).
 det([a | T],T,_,C,C).
 det(T,T,_,C,C).
 
-% Adjectives consist of a sequence of adjectives.
-% The meaning of the arguments is the same as for noun_phrase
-adjectives(T0,T2,Ind,C0,C2) :-
-    adj(T0,T1,Ind,C0,C1),
-    adjectives(T1,T2,Ind,C1,C2).
-adjectives(T,T,_,C,C).
+% Connectors are prepositions or conjunctions, which we will ignore.
+% % They do not provide any extra constaints.
+connector([to | T],T,_,C,C).
+connector([of | T],T,_,C,C).
+connector([and | T],T,_,C,C).
+connector(T,T,_,C,C).
 
-% An optional modifying phrase / relative clause is either
-% a relation (verb or preposition) followed by a noun_phrase or
-% 'that' followed by a relation then a noun_phrase or
-% nothing 
-mp(T0,T2,I1,C0,C2) :-
-    reln(T0,T1,I1,I2,C0,C1),
-    noun_phrase(T1,T2,I2,C1,C2).
-mp([that|T0],T2,I1,C0,C2) :-
-    reln(T0,T1,I1,I2,C0,C1),
-    noun_phrase(T1,T2,I2,C1,C2).
-mp(T,T,_,C,C).
+% Attributes
+% for any given question topic, associate it with the appropriate attributes
+copy(howtocopy).
 
-% DICTIONARY
+copy(howtocopyandpaste).
+paste(howtocopyandpaste).
 
-% adj(T0,T1,Ind,C0,C1) is true if T0-T1 is an adjective that provides properties C1-C0 to Ind
-% example: adj([spanish, speaking | T],T,Ind,C,[spanish_speaking(Ind)|C]).
+move(howtomove).
 
-% noun(T0,T1,Ind,C0,C1) is true if T0-T1 is a noun that provides properties C1-C0 to Ind
-% example: noun([country | T],T,Ind,C,[country(Ind)|C]).
-% The following are for proper nouns:
-% example: noun([Ind | T],T,Ind,C,C) :- country(Ind).
+move(howtomoveup).
+up(howtomoveup).
 
-% reln(T0,T1,I1,I2,R0,R1) is true if T0-T1 is a relation
-%   that provides relations R1-R0 on individuals I1 and I2
-% example: reln([borders | T],T,I1,I2,C,[borders(I1,I2)|C]).
+jump(howtojump).
 
-question([is | T0],T2,Ind,C0,C2) :-
-    noun_phrase(T0,T1,Ind,C0,C1),
-    mp(T1,T2,Ind,C1,C2).
-question([what,is | T0],T1,Ind,C0,C1) :-
-    mp(T0,T1,Ind,C0,C1).
-question([what,is | T0],T1,Ind,C0,C1) :-
-    noun_phrase(T0,T1,Ind,C0,C1).
-question([what,is | T0],T1,Ind,C0,C1) :-
-    adjectives(T0,T1,Ind,C0,C1).
-question([what | T0],T2,Ind,C0,C2) :-      % allows for a "what ... is ..."
-    noun_phrase(T0,[is|T1],Ind,C0,C1),
-    mp(T1,T2,Ind,C1,C2).
-question([what | T0],T2,Ind,C0,C2) :-
-    noun_phrase(T0,T1,Ind,C0,C1),
-    mp(T1,T2,Ind,C1,C2).
+jump(howtojumptothebottom).
+bottom(howtojumptothebottom).
+
+% solution(Topic,A) gives you the solution string A associated with a Topic
+solution(howtomove, "this is how you move").
+solution(howtomoveup, "this is how you move UP").
+solution(howtocopy, "this is how you copy").
+solution(howtocopyandpaste, "this is how you copyandpaste").
+solution(howtojump, "this is how you jump").
+solution(howtojumptothebottom, "this is how you jumptothebottom").
+
+% Map keywords in the question to the correct attribute
+% keyword(T0,T1,Ind,C0,C1) is true if T0-T1 is a keyword that provides attributes C1-C0 to Ind
+keyword([move | T],T,Ind,C,[move(Ind)|C]).
+keyword([up | T],T,Ind,C,[up(Ind)|C]).
+keyword([copy | T],T,Ind,C,[copy(Ind)|C]).
+keyword([paste | T],T,Ind,C,[paste(Ind)|C]).
+
+keyword([select | T],T,Ind,C,[select(Ind)|C]).
+keyword([jump | T],T,Ind,C,[jump(Ind)|C]).
+keyword([bottom | T],T,Ind,C,[bottom(Ind)|C]).
+
+% if these words appear, they won't affect anything:
+keyword([screen | T],T,_,C,C).
+
+% question([is | T0],T2,Ind,C0,C2) :-
+%     keyword_phrase(T0,T1,Ind,C0,C1),
+%     mp(T1,T2,Ind,C1,C2).
+% question([what,is | T0],T1,Ind,C0,C1) :-
+%     mp(T0,T1,Ind,C0,C1).
+% question([what,is | T0],T1,Ind,C0,C1) :-
+%     keyword_phrase(T0,T1,Ind,C0,C1).
+question([how, do, you | T0],T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
+% question([what,is | T0],T1,Ind,C0,C1) :-
+%     adjectives(T0,T1,Ind,C0,C1).
+% question([what | T0],T2,Ind,C0,C2) :-      % allows for a "what ... is ..."
+%     keyword_phrase(T0,[is|T1],Ind,C0,C1),
+%     mp(T1,T2,Ind,C1,C2).
+% question([what | T0],T2,Ind,C0,C2) :-
+%     keyword_phrase(T0,T1,Ind,C0,C1),
+%     mp(T1,T2,Ind,C1,C2).
 
 % ask(Q,A) gives answer A to question Q
-ask(Q,A) :-
-    question(Q,[],A,[],C),
+%
+% NOTE: S is a sentence, Q is that sentence as a list
+ask(Q,T) :-
+    atomic_list_concat(L,' ', Q),
+    solution(A, T),
+    question(L,[],A,[],C),
     prove_all(C).
 
 % prove_all(L) proves all elements of L against the database
@@ -85,4 +100,6 @@ prove_all([H|T]) :-
      H,
     prove_all(T).
 
-
+% example queries:
+% ask("how do you move",X).
+% ask("how do you move",X).
