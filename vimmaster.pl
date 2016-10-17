@@ -24,21 +24,17 @@ det(T,T,_,C,C).
 % Connectors are prepositions or conjunctions, which we will ignore.
 % % They do not provide any extra constaints.
 connector([to | T],T,_,C,C).
+connector([at | T],T,_,C,C).
 connector([of | T],T,_,C,C).
 connector([and | T],T,_,C,C).
 connector(T,T,_,C,C).
 
 % Attributes
 % for any given question topic, associate it with the appropriate attributes
-copy(howtocopy).
-
 copy(howtocopyandpaste).
 paste(howtocopyandpaste).
 
 move(howtomove).
-
-move(howtomoveup).
-up(howtomoveup).
 
 jump(howtojump).
 
@@ -66,8 +62,6 @@ replace(howtosearchandreplace).
 
 % solution(Topic,A) gives you the solution string A associated with a Topic
 solution(howtomove, "this is how you move").
-solution(howtomoveup, "this is how you move UP").
-solution(howtocopy, "this is how you copy").
 solution(howtocopyandpaste, "this is how you copyandpaste").
 solution(howtojump, "this is how you jump").
 solution(howtojumptothebottom, "this is how you jumptothebottom").
@@ -114,6 +108,10 @@ keyword([screen | T],T,_,C,C).
 %     keyword_phrase(T0,T1,Ind,C0,C1).
 question([how, do, you | T0],T1,Ind,C0,C1) :-
     keyword_phrase(T0,T1,Ind,C0,C1).
+question([how, to | T0],T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
+question(T0,T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
 % question([what,is | T0],T1,Ind,C0,C1) :-
 %     adjectives(T0,T1,Ind,C0,C1).
 % question([what | T0],T2,Ind,C0,C2) :-      % allows for a "what ... is ..."
@@ -129,8 +127,18 @@ question([how, do, you | T0],T1,Ind,C0,C1) :-
 ask(Q,T) :-
     atomic_list_concat(L,' ', Q),
     question(L,[],A,[],C),
-    solution(A, T),
-    prove_all(C).
+    prove_all(C),
+    solution(A, T).
+
+get(L) :-
+    open('vimrc', write, Stream),
+    writeFeature(L, Stream),
+    close(Stream).
+
+writeFeature(_, Stream) :-
+    write(Stream, 'hi'), nl(Stream),
+    write(Stream, 'bye').
+
 
 % prove_all(L) proves all elements of L against the database
 prove_all([]).
@@ -139,5 +147,4 @@ prove_all([H|T]) :-
     prove_all(T).
 
 % example queries:
-% ask("how do you move",X).
 % ask("how do you move",X).
