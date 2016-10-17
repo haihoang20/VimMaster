@@ -90,8 +90,8 @@ question([how, do, you | T0],T1,Ind,C0,C1) :-
 % NOTE: S is a sentence, Q is that sentence as a list
 ask(Q,T) :-
     atomic_list_concat(L,' ', Q),
-    solution(A, T),
     question(L,[],A,[],C),
+    solution(A, T),
     prove_all(C).
 
 % prove_all(L) proves all elements of L against the database
