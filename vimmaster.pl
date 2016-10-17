@@ -31,8 +31,11 @@ connector(T,T,_,C,C).
 
 % Attributes
 % for any given question topic, associate it with the appropriate attributes
-copy(howtocopyandpaste).
-paste(howtocopyandpaste).
+copy(howtocopyandpasteselected).
+copy(howtocopyandpasteline).
+paste(howtocopyandpasteselected).
+paste(howtocopyandpasteline).
+selected(howtocopyandpasteselected).
 
 move(howtomove).
 
@@ -56,6 +59,7 @@ end(howtoinserttoendofline).
 word(howtoinserttoendofword).
 line(howtoinserttoendofline).
 
+line(howtocopyandpasteline).
 search(howtosearch).
 search(howtosearchandreplace).
 replace(howtosearchandreplace).
@@ -74,8 +78,10 @@ visual(howtoswitchmodetovisual).
 
 
 % solution(Topic,A) gives you the solution string A associated with a Topic
-solution(howtomove, "this is how you move").
-solution(howtocopyandpaste, "this is how you copyandpaste").
+solution(howtomove, "Move left: 'h', move right: 'l', move up: 'k', move down: 'j'. You can also move using the arrow keys.").
+solution(howtocopyandpasteselected, "To copy selected text, enter visual mode, select the text by moving the cursor until you cover it, and then type 'y'. Exit visual mode. Paste it by typing 'p'.").
+solution(howtocopyandpasteline, "To copy a line, make sure you are in normal mode, and then type 'yy'. You can optionally type a number first, like '3 yy', and this will that number of lines. To paste, type 'p'.").
+
 solution(howtojump, "this is how you jump").
 solution(howtojumptothebottom, "this is how you jumptothebottom").
 solution(howtoinsert, "this is how you insert").
@@ -97,8 +103,9 @@ keyword([move | T],T,Ind,C,[move(Ind)|C]).
 keyword([up | T],T,Ind,C,[up(Ind)|C]).
 keyword([copy | T],T,Ind,C,[copy(Ind)|C]).
 keyword([paste | T],T,Ind,C,[paste(Ind)|C]).
+keyword([line | T],T,Ind,C,[line(Ind)|C]).
 
-keyword([select | T],T,Ind,C,[select(Ind)|C]).
+keyword([selected | T],T,Ind,C,[selected(Ind)|C]).
 keyword([jump | T],T,Ind,C,[jump(Ind)|C]).
 keyword([bottom | T],T,Ind,C,[bottom(Ind)|C]).
 
