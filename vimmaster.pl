@@ -36,7 +36,9 @@ copy(howtocopyandpasteline).
 paste(howtocopyandpasteselected).
 paste(howtocopyandpasteline).
 selected(howtocopyandpasteselected).
-
+selected(howtodeleteselected).
+delete(howtodeleteselected).
+delete(howtodeleteline).
 move(howtomove).
 
 jump(howtojump).
@@ -51,13 +53,15 @@ insert(howtoinserttomultiplelines).
 
 multiple(howtoinserttomultiplelines).
 lines(howtoinserttomultiplelines).
+lines(howtodeleteline).
+lines(howtocopyandpasteline).
 
 end(howtoinserttoendofword).
 end(howtoinserttoendofline).
 
 word(howtoinserttoendofword).
 line(howtoinserttoendofline).
-
+line(howtodeleteline).
 line(howtocopyandpasteline).
 search(howtosearch).
 search(howtosearchandreplace).
@@ -67,8 +71,9 @@ replace(howtosearchandreplace).
 % solution(Topic,A) gives you the solution string A associated with a Topic
 solution(howtomove, "Move left: 'h', move right: 'l', move up: 'k', move down: 'j'. You can also move using the arrow keys.").
 solution(howtocopyandpasteselected, "To copy selected text, enter visual mode, select the text by moving the cursor until you cover it, and then type 'y'. Exit visual mode. Paste it by typing 'p'.").
-solution(howtocopyandpasteline, "To copy a line, make sure you are in normal mode, and then type 'yy'. You can optionally type a number first, like '3 yy', and this will that number of lines. To paste, type 'p'.").
-
+solution(howtocopyandpasteline, "To copy the current line, make sure you are in normal mode, and then type 'yy'. You can optionally type a number first, like '3 yy', and this will copy that number of consecutive lines (in this case, 3). To paste, type 'p'.").
+solution(howtodeleteselected, "To delete selected text, enter visual mode, select the text by moving the cursor until you cover it, and then type 'd'. Exit visual mode. You can paste deleted text by typing 'p'.").
+solution(howtodeleteline, "To delete the current line, make sure you are in normal mode, and then type 'dd'. You can optionally type a number first, like '3 dd', and this will delete that number of consecutive lines (in this case, 3). To paste deleted text, type 'p'.").
 solution(howtojump, "this is how you jump").
 solution(howtojumptothebottom, "this is how you jumptothebottom").
 solution(howtoinsert, "this is how you insert").
@@ -86,7 +91,7 @@ keyword([move | T],T,Ind,C,[move(Ind)|C]).
 keyword([up | T],T,Ind,C,[up(Ind)|C]).
 keyword([copy | T],T,Ind,C,[copy(Ind)|C]).
 keyword([paste | T],T,Ind,C,[paste(Ind)|C]).
-keyword([line | T],T,Ind,C,[line(Ind)|C]).
+keyword([delete | T],T,Ind,C,[delete(Ind)|C]).
 
 keyword([selected | T],T,Ind,C,[selected(Ind)|C]).
 keyword([jump | T],T,Ind,C,[jump(Ind)|C]).
