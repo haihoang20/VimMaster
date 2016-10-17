@@ -50,6 +50,7 @@ insert(howtoinsert).
 insert(howtoinserttoendofword).
 insert(howtoinserttoendofline).
 insert(howtoinserttomultiplelines).
+insert(howtoswitchmodetoinsert).
 
 multiple(howtoinserttomultiplelines).
 lines(howtoinserttomultiplelines).
@@ -65,8 +66,40 @@ line(howtodeleteline).
 line(howtocopyandpasteline).
 search(howtosearch).
 search(howtosearchandreplace).
-
 replace(howtosearchandreplace).
+
+switch(howtoswitchmodetoinsert).
+switch(howtoswitchmodetonormal).
+switch(howtoswitchmodetovisual).
+
+mode(howtoswitchmodetoinsert).
+mode(howtoswitchmodetonormal).
+mode(howtoswitchmodetovisual).
+
+normal(howtoswitchmodetonormal).
+visual(howtoswitchmodetovisual).
+
+quit(howtoquit).
+quit(howtosaveandquit).
+save(howtosaveandquit).
+save(howtosave).
+
+split(howtosplitwindowhorizontally).
+split(howtosplitwindowvertically).
+split(howtosplitwindow).
+
+screen(howtosplitwindowhorizontally).
+screen(howtosplitwindowvertically).
+screen(howtosplitwindow).
+screen(howtojumptothebottom).
+
+
+vertically(howtosplitwindowvertically).
+horizontally(howtosplitwindowhorizontally).
+
+
+
+
 
 % solution(Topic,A) gives you the solution string A associated with a Topic
 solution(howtomove, "Move left: 'h', move right: 'l', move up: 'k', move down: 'j'. You can also move using the arrow keys.").
@@ -82,6 +115,17 @@ solution(howtoinserttoendofline, "this is how you insert to end of line").
 solution(howtoinserttomultiplelines, "howtoinserttomultiplelines").
 solution(howtosearchandreplace, "howtosearchandreplace").
 solution(howtosearch, "howtosearch").
+solution(howtoswitchmodes, "howtoswitchmode").
+solution(howtoswitchmodetoinsert, "howtoswitchmodetoinsert").
+solution(howtoswitchmodetovisual, "howtoswitchmodetovisual").
+solution(howtoswitchmodetonormal, "howtoswitchmodetonormal").
+solution(howtosave,"howtosave").
+solution(howtosaveandquit, "howtosaveandquit").
+solution(howtoquit, "howtoquit").
+solution(howtosplitwindow, "howtosplitwindow").
+solution(howtosplitwindowvertically, "howtosplitwindowvertically").
+solution(howtosplitwindowhorizontally, "howtosplitwindowhorizontally").
+
 
 
 
@@ -107,9 +151,31 @@ keyword([replace | T],T,Ind,C,[replace(Ind)|C]).
 keyword([multiple | T],T,Ind,C,[multiple(Ind)|C]).
 keyword([lines | T],T,Ind,C,[lines(Ind)|C]).
 
+% switch and change mean the same thing
+keyword([change | T],T,Ind,C,[switch(Ind)|C]).
+keyword([switch | T],T,Ind,C,[switch(Ind)|C]).
+% mode and modes mean the same thing
+keyword([mode | T],T,Ind,C,[mode(Ind)|C]).
+keyword([modes | T],T,Ind,C,[mode(Ind)|C]).
+
+keyword([visual | T],T,Ind,C,[visual(Ind)|C]).
+keyword([normal | T],T,Ind,C,[normal(Ind)|C]).
+
+keyword([save | T],T,Ind,C,[save(Ind)|C]).
+keyword([quit | T],T,Ind,C,[quit(Ind)|C]).
+%screen and window are the same
+keyword([screen | T],T,Ind,C,[screen(Ind)|C]).
+keyword([window | T],T,Ind,C,[screen(Ind)|C]).
+
+
+keyword([split | T],T,Ind,C,[split(Ind)|C]).
+keyword([horizontally | T],T,Ind,C,[horizontally(Ind)|C]).
+keyword([vertically | T],T,Ind,C,[vertically(Ind)|C]).
+
+
 
 % if these words appear, they won't affect anything:
-keyword([screen | T],T,_,C,C).
+keyword([number | T],T,_,C,C).
 
 % question([is | T0],T2,Ind,C0,C2) :-
 %     keyword_phrase(T0,T1,Ind,C0,C1),
