@@ -75,6 +75,26 @@ mode(howtoswitchmodetovisual).
 normal(howtoswitchmodetonormal).
 visual(howtoswitchmodetovisual).
 
+quit(howtoquit).
+quit(howtosaveandquit).
+save(howtosaveandquit).
+save(howtosave).
+
+split(howtosplitwindowhorizontally).
+split(howtosplitwindowvertically).
+split(howtosplitwindow).
+
+screen(howtosplitwindowhorizontally).
+screen(howtosplitwindowvertically).
+screen(howtosplitwindow).
+screen(howtojumptothebottom).
+
+
+vertically(howtosplitwindowvertically).
+horizontally(howtosplitwindowhorizontally).
+
+
+
 
 
 % solution(Topic,A) gives you the solution string A associated with a Topic
@@ -94,6 +114,13 @@ solution(howtoswitchmodes, "howtoswitchmode").
 solution(howtoswitchmodetoinsert, "howtoswitchmodetoinsert").
 solution(howtoswitchmodetovisual, "howtoswitchmodetovisual").
 solution(howtoswitchmodetonormal, "howtoswitchmodetonormal").
+solution(howtosave,"howtosave").
+solution(howtosaveandquit, "howtosaveandquit").
+solution(howtoquit, "howtoquit").
+solution(howtosplitwindow, "howtosplitwindow").
+solution(howtosplitwindowvertically, "howtosplitwindowvertically").
+solution(howtosplitwindowhorizontally, "howtosplitwindowhorizontally").
+
 
 
 
@@ -129,10 +156,21 @@ keyword([modes | T],T,Ind,C,[mode(Ind)|C]).
 keyword([visual | T],T,Ind,C,[visual(Ind)|C]).
 keyword([normal | T],T,Ind,C,[normal(Ind)|C]).
 
+keyword([save | T],T,Ind,C,[save(Ind)|C]).
+keyword([quit | T],T,Ind,C,[quit(Ind)|C]).
+%screen and window are the same
+keyword([screen | T],T,Ind,C,[screen(Ind)|C]).
+keyword([window | T],T,Ind,C,[screen(Ind)|C]).
+
+
+keyword([split | T],T,Ind,C,[split(Ind)|C]).
+keyword([horizontally | T],T,Ind,C,[horizontally(Ind)|C]).
+keyword([vertically | T],T,Ind,C,[vertically(Ind)|C]).
+
 
 
 % if these words appear, they won't affect anything:
-keyword([screen | T],T,_,C,C).
+keyword([number | T],T,_,C,C).
 
 % question([is | T0],T2,Ind,C0,C2) :-
 %     keyword_phrase(T0,T1,Ind,C0,C1),
