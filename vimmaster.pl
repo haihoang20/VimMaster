@@ -88,6 +88,10 @@ keyword([screen | T],T,_,C,C).
 %     keyword_phrase(T0,T1,Ind,C0,C1).
 question([how, do, you | T0],T1,Ind,C0,C1) :-
     keyword_phrase(T0,T1,Ind,C0,C1).
+question([how, to | T0],T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
+question(T0,T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
 % question([what,is | T0],T1,Ind,C0,C1) :-
 %     adjectives(T0,T1,Ind,C0,C1).
 % question([what | T0],T2,Ind,C0,C2) :-      % allows for a "what ... is ..."
