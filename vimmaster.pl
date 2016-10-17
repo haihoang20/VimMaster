@@ -106,6 +106,16 @@ ask(Q,T) :-
     prove_all(C),
     solution(A, T).
 
+get(L) :-
+    open('vimrc', write, Stream),
+    writeFeature(L, Stream),
+    close(Stream).
+
+writeFeature(_, Stream) :-
+    write(Stream, 'hi'), nl(Stream),
+    write(Stream, 'bye').
+
+
 % prove_all(L) proves all elements of L against the database
 prove_all([]).
 prove_all([H|T]) :-
