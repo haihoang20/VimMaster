@@ -45,6 +45,7 @@ insert(howtoinsert).
 insert(howtoinserttoendofword).
 insert(howtoinserttoendofline).
 insert(howtoinserttomultiplelines).
+insert(howtoswitchmodetoinsert).
 
 multiple(howtoinserttomultiplelines).
 lines(howtoinserttomultiplelines).
@@ -57,8 +58,20 @@ line(howtoinserttoendofline).
 
 search(howtosearch).
 search(howtosearchandreplace).
-
 replace(howtosearchandreplace).
+
+switch(howtoswitchmodetoinsert).
+switch(howtoswitchmodetonormal).
+switch(howtoswitchmodetovisual).
+
+mode(howtoswitchmodetoinsert).
+mode(howtoswitchmodetonormal).
+mode(howtoswitchmodetovisual).
+
+normal(howtoswitchmodetonormal).
+visual(howtoswitchmodetovisual).
+
+
 
 % solution(Topic,A) gives you the solution string A associated with a Topic
 solution(howtomove, "this is how you move").
@@ -71,6 +84,10 @@ solution(howtoinserttoendofline, "this is how you insert to end of line").
 solution(howtoinserttomultiplelines, "howtoinserttomultiplelines").
 solution(howtosearchandreplace, "howtosearchandreplace").
 solution(howtosearch, "howtosearch").
+solution(howtoswitchmodes, "howtoswitchmode").
+solution(howtoswitchmodetoinsert, "howtoswitchmodetoinsert").
+solution(howtoswitchmodetovisual, "howtoswitchmodetovisual").
+solution(howtoswitchmodetonormal, "howtoswitchmodetonormal").
 
 
 
@@ -94,6 +111,17 @@ keyword([search | T],T,Ind,C,[search(Ind)|C]).
 keyword([replace | T],T,Ind,C,[replace(Ind)|C]).
 keyword([multiple | T],T,Ind,C,[multiple(Ind)|C]).
 keyword([lines | T],T,Ind,C,[lines(Ind)|C]).
+
+% switch and change mean the same thing
+keyword([change | T],T,Ind,C,[switch(Ind)|C]).
+keyword([switch | T],T,Ind,C,[switch(Ind)|C]).
+% mode and modes mean the same thing
+keyword([mode | T],T,Ind,C,[mode(Ind)|C]).
+keyword([modes | T],T,Ind,C,[mode(Ind)|C]).
+
+keyword([visual | T],T,Ind,C,[visual(Ind)|C]).
+keyword([normal | T],T,Ind,C,[normal(Ind)|C]).
+
 
 
 % if these words appear, they won't affect anything:
