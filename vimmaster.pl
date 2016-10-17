@@ -68,9 +68,9 @@ solution(howtojumptothebottom, "this is how you jumptothebottom").
 solution(howtoinsert, "this is how you insert").
 solution(howtoinserttoendofword, "this is how you insert to end of word").
 solution(howtoinserttoendofline, "this is how you insert to end of line").
+solution(howtoinserttomultiplelines, "howtoinserttomultiplelines").
 solution(howtosearchandreplace, "howtosearchandreplace").
 solution(howtosearch, "howtosearch").
-solution(howtoinserttomultiplelines, "howtoinserttomultiplelines").
 
 
 
