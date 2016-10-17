@@ -41,10 +41,14 @@ delete(howtodeleteselected).
 delete(howtodeleteline).
 move(howtomove).
 
-jump(howtojump).
+file(howtojumpfile).
 
-jump(howtojumptothebottom).
-bottom(howtojumptothebottom).
+jump(howtojumpline).
+jump(howtojumpfile).
+jump(howtojumpparagraph).
+jump(howtojumpword).
+
+paragraph(howtojumpparagraph).
 
 insert(howtoinsert).
 insert(howtoinserttoendofword).
@@ -59,11 +63,17 @@ lines(howtocopyandpasteline).
 
 end(howtoinserttoendofword).
 end(howtoinserttoendofline).
+end(howtojumpline).
+end(howtojumpfile).
+end(howtojumpparagraph).
+end(howtojumpword).
 
 word(howtoinserttoendofword).
+word(howtojumpword).
 line(howtoinserttoendofline).
 line(howtodeleteline).
 line(howtocopyandpasteline).
+line(howtojumpline).
 search(howtosearch).
 search(howtosearchandreplace).
 replace(howtosearchandreplace).
@@ -91,14 +101,9 @@ split(howtosplitwindow).
 screen(howtosplitwindowhorizontally).
 screen(howtosplitwindowvertically).
 screen(howtosplitwindow).
-screen(howtojumptothebottom).
-
 
 vertically(howtosplitwindowvertically).
 horizontally(howtosplitwindowhorizontally).
-
-
-
 
 
 % solution(Topic,A) gives you the solution string A associated with a Topic
@@ -107,8 +112,12 @@ solution(howtocopyandpasteselected, "To copy selected text, enter visual mode, s
 solution(howtocopyandpasteline, "To copy the current line, make sure you are in normal mode, and then type 'yy'. You can optionally type a number first, like '3 yy', and this will copy that number of consecutive lines (in this case, 3). To paste, type 'p'.").
 solution(howtodeleteselected, "To delete selected text, enter visual mode, select the text by moving the cursor until you cover it, and then type 'd'. Exit visual mode. You can paste deleted text by typing 'p'.").
 solution(howtodeleteline, "To delete the current line, make sure you are in normal mode, and then type 'dd'. You can optionally type a number first, like '3 dd', and this will delete that number of consecutive lines (in this case, 3). To paste deleted text, type 'p'.").
-solution(howtojump, "this is how you jump").
-solution(howtojumptothebottom, "this is how you jumptothebottom").
+
+solution(howtojumpline, "To jump to the beginning of the line, type '0'. To jump to the end of the line, type '$'").
+solution(howtojumpfile, "To jump to the beginning of the file, type 'gg'. To jump to the end of the file, type 'G'").
+solution(howtojumpparagraph, "To jump to the beginning of the paragraph, type '{'. To jump to the end of the paragraph, type '}'").
+solution(howtojumpword, "To jump to the beginning of the word, type 'w'. To jump to the end of the word, type 'b'").
+
 solution(howtoinsert, "this is how you insert").
 solution(howtoinserttoendofword, "this is how you insert to end of word").
 solution(howtoinserttoendofline, "this is how you insert to end of line").
@@ -126,9 +135,6 @@ solution(howtosplitwindow, "howtosplitwindow").
 solution(howtosplitwindowvertically, "howtosplitwindowvertically").
 solution(howtosplitwindowhorizontally, "howtosplitwindowhorizontally").
 
-
-
-
 % Map keywords in the question to the correct attribute
 % keyword(T0,T1,Ind,C0,C1) is true if T0-T1 is a keyword that provides attributes C1-C0 to Ind
 keyword([move | T],T,Ind,C,[move(Ind)|C]).
@@ -139,6 +145,7 @@ keyword([delete | T],T,Ind,C,[delete(Ind)|C]).
 
 keyword([selected | T],T,Ind,C,[selected(Ind)|C]).
 keyword([jump | T],T,Ind,C,[jump(Ind)|C]).
+keyword([go | T],T,Ind,C,[jump(Ind)|C]).
 keyword([bottom | T],T,Ind,C,[bottom(Ind)|C]).
 
 keyword([insert | T],T,Ind,C,[insert(Ind)|C]).
@@ -167,15 +174,17 @@ keyword([quit | T],T,Ind,C,[quit(Ind)|C]).
 keyword([screen | T],T,Ind,C,[screen(Ind)|C]).
 keyword([window | T],T,Ind,C,[screen(Ind)|C]).
 
+keyword([file | T],T,Ind,C,[file(Ind)|C]).
 
 keyword([split | T],T,Ind,C,[split(Ind)|C]).
 keyword([horizontally | T],T,Ind,C,[horizontally(Ind)|C]).
 keyword([vertically | T],T,Ind,C,[vertically(Ind)|C]).
 
 
-
 % if these words appear, they won't affect anything:
 keyword([number | T],T,_,C,C).
+keyword([beginning | T],T,_,C,C).
+keyword([start | T],T,_,C,C).
 
 % question([is | T0],T2,Ind,C0,C2) :-
 %     keyword_phrase(T0,T1,Ind,C0,C1),
