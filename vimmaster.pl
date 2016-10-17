@@ -45,6 +45,16 @@ jump(howtojump).
 jump(howtojumptothebottom).
 bottom(howtojumptothebottom).
 
+insert(howtoinsert).
+insert(howtoinserttoendofword).
+insert(howtoinserttoendofline).
+
+end(howtoinserttoendofword).
+end(howtoinserttoendofline).
+
+word(howtoinserttoendofword).
+line(howtoinserttoendofline).
+
 % solution(Topic,A) gives you the solution string A associated with a Topic
 solution(howtomove, "this is how you move").
 solution(howtomoveup, "this is how you move UP").
@@ -52,6 +62,9 @@ solution(howtocopy, "this is how you copy").
 solution(howtocopyandpaste, "this is how you copyandpaste").
 solution(howtojump, "this is how you jump").
 solution(howtojumptothebottom, "this is how you jumptothebottom").
+solution(howtoinsert, "this is how you insert").
+solution(howtoinserttoendofword, "this is how you insert to end of word").
+solution(howtoinserttoendofline, "this is how you insert to end of line").
 
 % Map keywords in the question to the correct attribute
 % keyword(T0,T1,Ind,C0,C1) is true if T0-T1 is a keyword that provides attributes C1-C0 to Ind
@@ -63,6 +76,11 @@ keyword([paste | T],T,Ind,C,[paste(Ind)|C]).
 keyword([select | T],T,Ind,C,[select(Ind)|C]).
 keyword([jump | T],T,Ind,C,[jump(Ind)|C]).
 keyword([bottom | T],T,Ind,C,[bottom(Ind)|C]).
+
+keyword([insert | T],T,Ind,C,[insert(Ind)|C]).
+keyword([end | T],T,Ind,C,[end(Ind)|C]).
+keyword([word | T],T,Ind,C,[word(Ind)|C]).
+keyword([line | T],T,Ind,C,[line(Ind)|C]).
 
 % if these words appear, they won't affect anything:
 keyword([screen | T],T,_,C,C).
