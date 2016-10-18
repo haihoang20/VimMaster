@@ -26,6 +26,7 @@ det(T,T,_,C,C).
 connector([to | T],T,_,C,C).
 connector([at | T],T,_,C,C).
 connector([of | T],T,_,C,C).
+connector([in | T],T,_,C,C).
 connector([and | T],T,_,C,C).
 connector(T,T,_,C,C).
 
@@ -185,34 +186,36 @@ keyword([vertically | T],T,Ind,C,[vertically(Ind)|C]).
 keyword([number | T],T,_,C,C).
 keyword([beginning | T],T,_,C,C).
 keyword([start | T],T,_,C,C).
+keyword([vim | T],T,_,C,C).
+keyword([work | T],T,_,C,C).
+keyword([text | T],T,_,C,C).
 
-% question([is | T0],T2,Ind,C0,C2) :-
-%     keyword_phrase(T0,T1,Ind,C0,C1),
-%     mp(T1,T2,Ind,C1,C2).
-% question([what,is | T0],T1,Ind,C0,C1) :-
-%     mp(T0,T1,Ind,C0,C1).
-% question([what,is | T0],T1,Ind,C0,C1) :-
-%     keyword_phrase(T0,T1,Ind,C0,C1).
 question([how, do, you | T0],T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
+% for questions like 'how does X work in vim'
+question([how, does | T0],T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
+question([can, you | T0],T1,Ind,C0,C1) :-
+    keyword_phrase(T0,T1,Ind,C0,C1).
+question([how, can, you | T0],T1,Ind,C0,C1) :-
     keyword_phrase(T0,T1,Ind,C0,C1).
 question([how, to | T0],T1,Ind,C0,C1) :-
     keyword_phrase(T0,T1,Ind,C0,C1).
 question(T0,T1,Ind,C0,C1) :-
     keyword_phrase(T0,T1,Ind,C0,C1).
-% question([what,is | T0],T1,Ind,C0,C1) :-
-%     adjectives(T0,T1,Ind,C0,C1).
-% question([what | T0],T2,Ind,C0,C2) :-      % allows for a "what ... is ..."
-%     keyword_phrase(T0,[is|T1],Ind,C0,C1),
-%     mp(T1,T2,Ind,C1,C2).
-% question([what | T0],T2,Ind,C0,C2) :-
-%     keyword_phrase(T0,T1,Ind,C0,C1),
-%     mp(T1,T2,Ind,C1,C2).
 
 % ask(Q,A) gives answer A to question Q
 %
 % NOTE: S is a sentence, Q is that sentence as a list
+%
+% taken from http://stackoverflow.com/questions/19736439/delete-character-from-string-in-prolog
+remove_char(S,C,X) :- atom_concat(L,R,S), atom_concat(C,W,R), atom_concat(L,W,X).
+remove_char(S,_,S).
+
 ask(Q,T) :-
-    atomic_list_concat(L,' ', Q),
+    remove_char(Q, '?', Q2),
+    string_lower(Q2, Q3),
+    atomic_list_concat(L,' ', Q3),
     question(L,[],A,[],C),
     prove_all(C),
     solution(A, T).
