@@ -227,16 +227,6 @@ ask(Q,T) :-
     prove_all(C),
     solution(A, T).
 
-get(L) :-
-    open('vimrc', write, Stream),
-    writeFeature(L, Stream),
-    close(Stream).
-
-writeFeature(_, Stream) :-
-    write(Stream, 'hi'), nl(Stream),
-    write(Stream, 'bye').
-
-
 % prove_all(L) proves all elements of L against the database
 prove_all([]).
 prove_all([H|T]) :-
@@ -245,3 +235,57 @@ prove_all([H|T]) :-
 
 % example queries:
 % ask("how do you move",X).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+vimrc_connector([numbers | T],T,C,C).
+vimrc_connector([highlighting | T],T,C,C).
+vimrc_connector([search, results | T],T,C,C).
+vimrc_connector(T,T,C,C).
+
+vimrc_keyword([line | T],T,C,["set number"|C]).
+vimrc_keyword([syntax | T],T,C,["syntax on"|C]).
+vimrc_keyword([highlight | T],T,C,["set hlsearch"|C]).
+
+separate_features(T0,T4,C0,C4) :-
+    det(T0,T1,_,C0,C1),
+    vimrc_keyword(T1,T2,C1,C2),
+    vimrc_connector(T2,T3,C2,C3),
+    separate_features(T3,T4,C3,C4).
+separate_features(T,T,C,C).
+
+convert_string_list_to_word_list([],[]).
+convert_string_list_to_word_list([H|T],R) :-
+    atomic_list_concat(L,' ',H),
+    convert_string_list_to_word_list(T,R0),
+    append(L,R0,R).
+
+make_features_list([vimrc, file, with|T], L, R) :-
+    convert_string_list_to_word_list(L,R0),
+    append(T,R0,R).
+
+vimrc([H|T],L1) :-
+    atomic_list_concat(L,' ',H),
+    make_features_list(L, T, L1).
+
+% example query:
+% get("vimrc file with line numbers, syntax highlighting, highlight search results").
+get(Q) :-
+    atomic_list_concat(L,', ',Q),
+    vimrc(L,L1),
+    separate_features(L1,[],[],C),
+    create_vimrc(C).
+
+
+% L is a list of features that you want in your vimrc file
+% example query:
+% create_vimrc(["set number", "syntax on", "set hlsearch"]).
+create_vimrc(L) :-
+open('vimrc', write, Stream),
+writeFeature(L, Stream),
+close(Stream).
+
+writeFeature([], _).
+writeFeature([H|T], Stream) :-
+write(Stream, H), nl(Stream),
+writeFeature(T,Stream).
