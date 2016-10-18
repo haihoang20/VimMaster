@@ -238,20 +238,14 @@ prove_all([H|T]) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-vimrc_connector([numbers | T],T,C,C).
-vimrc_connector([highlighting | T],T,C,C).
-vimrc_connector([search, results | T],T,C,C).
-vimrc_connector(T,T,C,C).
-
-vimrc_keyword([line | T],T,C,["set number"|C]).
-vimrc_keyword([syntax | T],T,C,["syntax on"|C]).
-vimrc_keyword([highlight | T],T,C,["set hlsearch"|C]).
+vimrc_keywords_to_command([line, numbers | T],T,C,["set number"|C]).
+vimrc_keywords_to_command([syntax, highlighting | T],T,C,["syntax on"|C]).
+vimrc_keywords_to_command([highlight, search, results | T],T,C,["set hlsearch"|C]).
 
 extract_features(T0,T4,C0,C4) :-
     det(T0,T1,_,C0,C1),
-    vimrc_keyword(T1,T2,C1,C2),
-    vimrc_connector(T2,T3,C2,C3),
-    extract_features(T3,T4,C3,C4).
+    vimrc_keywords_to_command(T1,T2,C1,C2),
+    extract_features(T2,T4,C2,C4).
 extract_features(T,T,C,C).
 
 convert_string_list_to_word_list([],[]).
