@@ -247,12 +247,12 @@ vimrc_keyword([line | T],T,C,["set number"|C]).
 vimrc_keyword([syntax | T],T,C,["syntax on"|C]).
 vimrc_keyword([highlight | T],T,C,["set hlsearch"|C]).
 
-separate_features(T0,T4,C0,C4) :-
+extract_features(T0,T4,C0,C4) :-
     det(T0,T1,_,C0,C1),
     vimrc_keyword(T1,T2,C1,C2),
     vimrc_connector(T2,T3,C2,C3),
-    separate_features(T3,T4,C3,C4).
-separate_features(T,T,C,C).
+    extract_features(T3,T4,C3,C4).
+extract_features(T,T,C,C).
 
 convert_string_list_to_word_list([],[]).
 convert_string_list_to_word_list([H|T],R) :-
@@ -260,20 +260,31 @@ convert_string_list_to_word_list([H|T],R) :-
     convert_string_list_to_word_list(T,R0),
     append(L,R0,R).
 
+% takes a list of strings L, and converts it into a list of words R0
+% and then appends it together with the other list of words S or other list
 make_features_list([vimrc, file, with|T], L, R) :-
     convert_string_list_to_word_list(L,R0),
     append(T,R0,R).
+make_features_list(S, L, R) :-
+    convert_string_list_to_word_list(L,R0),
+    append(S,R0,R).
 
-vimrc([H|T],L1) :-
+% takes a list of strings, such as:
+% ['vimrc file with line numbers', 'syntax highlighting']
+% and converts it into a list of words L1, such as:
+% [line, numbers, syntax, highlighting]
+make_vimrc_list([H|T],L1) :-
     atomic_list_concat(L,' ',H),
     make_features_list(L, T, L1).
 
 % example query:
 % get("vimrc file with line numbers, syntax highlighting, highlight search results").
+% or
+% get("line numbers, syntax highlighting").
 get(Q) :-
     atomic_list_concat(L,', ',Q),
-    vimrc(L,L1),
-    separate_features(L1,[],[],C),
+    make_vimrc_list(L,L1),
+    extract_features(L1,[],[],C),
     create_vimrc(C).
 
 
