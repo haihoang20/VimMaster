@@ -237,10 +237,18 @@ prove_all([H|T]) :-
 % ask("how do you move",X).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Initial attempt to allow for listing of all possible vim features. If we can
+% implement mapping from text str to rule like this, then it shouldn't be too hard
+% to go through all of these vimrc_pairs, and print the first parameter of each.
+%vimrc_pair("line numbers", "set number").
+%vimrc_keywords_to_command(X,T,C,[Rule|C]) :-
+%        append(Strlist, T, X), 
+%        atomic_list_concat(Strlist,' ',Str), vimrc_pair(Str, Rule).
 
-vimrc_keywords_to_command([line, numbers | T],T,C,["set number"|C]).
-vimrc_keywords_to_command([syntax, highlighting | T],T,C,["syntax on"|C]).
-vimrc_keywords_to_command([highlight, search, results | T],T,C,["set hlsearch"|C]).
+
+% vimrc_keywords_to_command([line, numbers | T],T,C,["set number"|C]).
+% vimrc_keywords_to_command([syntax, highlighting | T],T,C,["syntax on"|C]).
+% vimrc_keywords_to_command([highlight, search, results | T],T,C,["set hlsearch"|C]).
 
 extract_features(T0,T4,C0,C4) :-
     det(T0,T1,_,C0,C1),
