@@ -286,11 +286,11 @@ get(Q) :-
 % example query:
 % create_vimrc(["set number", "syntax on", "set hlsearch"]).
 create_vimrc(L) :-
-open('vimrc', write, Stream),
-writeFeature(L, Stream),
-close(Stream).
+    open('vimrc', write, Stream),
+    writeFeature(L, Stream),
+    close(Stream).
 
 writeFeature([], _).
 writeFeature([H|T], Stream) :-
-write(Stream, H), nl(Stream),
-writeFeature(T,Stream).
+    write(Stream, H), nl(Stream),
+    writeFeature(T,Stream).
