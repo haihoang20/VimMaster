@@ -1,3 +1,10 @@
+main :- 
+    current_prolog_flag(argv, Argv),
+    atomic_list_concat(Argv,' ',Q),
+    ask(Q, A),
+    print(A),
+    halt(0).
+
 % keyword_phrase(T0,T2,Ind,C0,C2) is true if
 %  T0 and T2 are list of words, such that
 %        T2 is an ending of T0
