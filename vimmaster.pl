@@ -251,40 +251,30 @@ extract_features(T0,T4,C0,C4) :-
     extract_features(T2,T4,C2,C4).
 extract_features(T,T,C,C).
 
-convert_string_list_to_word_list([],[]).
-convert_string_list_to_word_list([H|T],R) :-
-    atomic_list_concat(L,' ',H),
-    convert_string_list_to_word_list(T,R0),
-    append(L,R0,R).
+remove_substring(Start, All, End) :-
+    concat(Start, End, All).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% something is wrong here that causes the first rule to get deleted and causes a loop
-% to test this, add make_features_list after atomic_list_concat in the  get_vimrc clause
-% http://stackoverflow.com/questions/19736439/delete-character-from-string-in-prolog
-remove_chars(S,C,X) :-
-    atom_concat(L,R,S),
-    atom_concat(C,W,R),
-    atom_concat(L,W,X).
-remove_chars(_,_,_).
 
-make_features_list([H|T],R) :-
-    remove_chars(H,'vimrc file with ',N),
-    append(N,T,R).
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We can add other versions of make_feature_list, copy the whole predicate but  replacing "vimrc file with " with other leader strings we want to allow.
+make_features_list([H|T],[N|T]) :-
+    remove_substring("vimrc file with ", H, N).
+
+make_features_list(L,L).
 
 % example query:
 % get_vimrc("vimrc file with line numbers, syntax highlighting, highlight search results").
 % or
 % get_vimrc("line numbers, syntax highlighting").
+
 get_vimrc(Q) :-
-    atomic_list_concat(L,', ',Q),
+    atomic_list_concat(L1,', ',Q),
+    make_features_list(L1,L),
     extract_features(L,[],[],C),
     create_vimrc(C).
 
-
 % L is a list of features that you want in your vimrc file
 % example query:
-% create_vimrc(["set number", "syntax on", "set hlsearch"]).
+% create_vimrc("line numbers, highlight search results").
 create_vimrc(L) :-
     open('vimrc', write, Stream),
     writeFeature(L, Stream),
