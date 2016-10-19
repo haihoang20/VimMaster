@@ -237,18 +237,13 @@ prove_all([H|T]) :-
 % ask("how do you move",X).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Initial attempt to allow for listing of all possible vim features. If we can
-% implement mapping from text str to rule like this, then it shouldn't be too hard
-% to go through all of these vimrc_pairs, and print the first parameter of each.
-%vimrc_pair("line numbers", "set number").
-%vimrc_keywords_to_command(X,T,C,[Rule|C]) :-
-%        append(Strlist, T, X), 
-%        atomic_list_concat(Strlist,' ',Str), vimrc_pair(Str, Rule).
 
+vimrc_pair('line numbers', 'set number').
+vimrc_pair('syntax highlighting', 'syntax on').
+vimrc_pair('highlight search results', 'set hlsearch').
 
-% vimrc_keywords_to_command([line, numbers | T],T,C,["set number"|C]).
-% vimrc_keywords_to_command([syntax, highlighting | T],T,C,["syntax on"|C]).
-% vimrc_keywords_to_command([highlight, search, results | T],T,C,["set hlsearch"|C]).
+vimrc_keywords_to_command([Str|T],T,C,[Rule|C]) :-
+    vimrc_pair(Str, Rule).
 
 extract_features(T0,T4,C0,C4) :-
     det(T0,T1,_,C0,C1),
@@ -262,31 +257,28 @@ convert_string_list_to_word_list([H|T],R) :-
     convert_string_list_to_word_list(T,R0),
     append(L,R0,R).
 
-% takes a list of strings L, and converts it into a list of words R0
-% and then appends it together with the other list of words S or other list
-make_features_list([vimrc, file, with|T], L, R) :-
-    convert_string_list_to_word_list(L,R0),
-    append(T,R0,R).
-make_features_list(S, L, R) :-
-    convert_string_list_to_word_list(L,R0),
-    append(S,R0,R).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% something is wrong here that causes the first rule to get deleted and causes a loop
+% to test this, add make_features_list after atomic_list_concat in the  get_vimrc clause
+% http://stackoverflow.com/questions/19736439/delete-character-from-string-in-prolog
+remove_chars(S,C,X) :-
+    atom_concat(L,R,S),
+    atom_concat(C,W,R),
+    atom_concat(L,W,X).
+remove_chars(_,_,_).
 
-% takes a list of strings, such as:
-% ['vimrc file with line numbers', 'syntax highlighting']
-% and converts it into a list of words L1, such as:
-% [line, numbers, syntax, highlighting]
-make_vimrc_list([H|T],L1) :-
-    atomic_list_concat(L,' ',H),
-    make_features_list(L, T, L1).
+make_features_list([H|T],R) :-
+    remove_chars(H,'vimrc file with ',N),
+    append(N,T,R).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % example query:
-% get("vimrc file with line numbers, syntax highlighting, highlight search results").
+% get_vimrc("vimrc file with line numbers, syntax highlighting, highlight search results").
 % or
-% get("line numbers, syntax highlighting").
-get(Q) :-
+% get_vimrc("line numbers, syntax highlighting").
+get_vimrc(Q) :-
     atomic_list_concat(L,', ',Q),
-    make_vimrc_list(L,L1),
-    extract_features(L1,[],[],C),
+    extract_features(L,[],[],C),
     create_vimrc(C).
 
 
@@ -302,3 +294,8 @@ writeFeature([], _).
 writeFeature([H|T], Stream) :-
     write(Stream, H), nl(Stream),
     writeFeature(T,Stream).
+
+
+% prints out what you can query to make a vimrc file
+vimrc_help(A) :-
+    vimrc_pair(A,_).
