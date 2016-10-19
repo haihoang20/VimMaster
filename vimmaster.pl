@@ -297,5 +297,14 @@ writeFeature([H|T], Stream) :-
 
 
 % prints out what you can query to make a vimrc file
-vimrc_help(A) :-
-    vimrc_pair(A,_).
+vimrc_help() :-
+    print('To generate a vimrc file, call the predicate create_vimrc, passing in a list of the features you want to include. Here is a list of all the features that you can add:'),
+    nl(),
+    getAllFeatures(L),
+    print(L),
+    nl(),
+    print('So for example, try calling create_vimrc("line numbers, highlight search results") to generate a vimrc which has the rule set for causing line numbers to appear on the left margin, and also the rule that will highlight any string that is matched in a search.').
+    
+getAllFeatures(L) :-
+    findall(A, vimrc_pair(A, _), L).
+    
