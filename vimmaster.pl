@@ -59,7 +59,7 @@ jump(howtojumpword).
 paragraph(howtojumpparagraph).
 
 insert(howtoinsert).
-insert(howtoinserttoendofword).
+insert(howtoinserttostartofline).
 insert(howtoinserttoendofline).
 insert(howtoinserttomultiplelines).
 insert(howtoswitchmodetoinsert).
@@ -69,15 +69,16 @@ lines(howtoinserttomultiplelines).
 lines(howtodeleteline).
 lines(howtocopyandpasteline).
 
-end(howtoinserttoendofword).
+start(howtoinserttostartofline).
+
 end(howtoinserttoendofline).
 end(howtojumpline).
 end(howtojumpfile).
 end(howtojumpparagraph).
 end(howtojumpword).
 
-word(howtoinserttoendofword).
 word(howtojumpword).
+line(howtoinserttostartofline).
 line(howtoinserttoendofline).
 line(howtodeleteline).
 line(howtocopyandpasteline).
@@ -121,27 +122,26 @@ solution(howtocopyandpasteline, "To copy the current line, make sure you are in 
 solution(howtodeleteselected, "To delete selected text, enter visual mode, select the text by moving the cursor until you cover it, and then type 'd'. Exit visual mode. You can paste deleted text by typing 'p'.").
 solution(howtodeleteline, "To delete the current line, make sure you are in normal mode, and then type 'dd'. You can optionally type a number first, like '3 dd', and this will delete that number of consecutive lines (in this case, 3). To paste deleted text, type 'p'.").
 
-solution(howtojumpline, "To jump to the beginning of the line, type '0'. To jump to the end of the line, type '$'").
-solution(howtojumpfile, "To jump to the beginning of the file, type 'gg'. To jump to the end of the file, type 'G'").
-solution(howtojumpparagraph, "To jump to the beginning of the paragraph, type '{'. To jump to the end of the paragraph, type '}'").
-solution(howtojumpword, "To jump to the beginning of the word, type 'w'. To jump to the end of the word, type 'b'").
+solution(howtojumpline, "To jump to the beginning of the line, type '0'. To jump to the end of the line, type '$'.").
+solution(howtojumpfile, "To jump to the beginning of the file, type 'gg'. To jump to the end of the file, type 'G'.").
+solution(howtojumpparagraph, "To jump to the beginning of the paragraph, type '{'. To jump to the end of the paragraph, type '}'.").
+solution(howtojumpword, "To jump to the beginning of the word, type 'w'. To jump to the end of the word, type 'b'.").
 
-solution(howtoinsert, "this is how you insert").
-solution(howtoinserttoendofword, "this is how you insert to end of word").
-solution(howtoinserttoendofline, "this is how you insert to end of line").
-solution(howtoinserttomultiplelines, "howtoinserttomultiplelines").
-solution(howtosearchandreplace, "howtosearchandreplace").
-solution(howtosearch, "howtosearch").
-solution(howtoswitchmodes, "howtoswitchmode").
-solution(howtoswitchmodetoinsert, "howtoswitchmodetoinsert").
-solution(howtoswitchmodetovisual, "howtoswitchmodetovisual").
-solution(howtoswitchmodetonormal, "howtoswitchmodetonormal").
-solution(howtosave,"howtosave").
-solution(howtosaveandquit, "howtosaveandquit").
-solution(howtoquit, "howtoquit").
-solution(howtosplitwindow, "howtosplitwindow").
-solution(howtosplitwindowvertically, "howtosplitwindowvertically").
-solution(howtosplitwindowhorizontally, "howtosplitwindowhorizontally").
+solution(howtoinsert, "To insert before the cursor, type 'i'. To insert after the cursor, type 'a'.").
+solution(howtoinserttostartofline, "To insert to beginning of line, type 'I'.").
+solution(howtoinserttoendofline, "To insert to end of line, type 'A'.").
+solution(howtoinserttomultiplelines, "To insert to multiple lines, press Ctrl-v to enter visual block mode, press 'j' or 'k' to select lines to insert, type 'I', write your text, then press escape.").
+solution(howtosearchandreplace, "To search and replace, type ':s/<word-to-search>/<word-to-replace>'. You can also add a global and confirmation prompt by adding 'g' and 'c' flags. For instance, ':/s/foo/bar/gc' would replace every instance of foo with bar in the current file with a prompt specifying whether or not you want the replacement to occur.").
+solution(howtosearch, "To search, type '/<word-to-search>'. For instance '/hello', searches for the word hello in the current document.").
+solution(howtoswitchmodetoinsert, "To switch to insert mode, type 'i'.").
+solution(howtoswitchmodetovisual, "To switch to visual mode, type 'v'.").
+solution(howtoswitchmodetonormal, "To switch to normal mode, press 'Esc'.").
+solution(howtosave,"To save, type ':w'.").
+solution(howtosaveandquit, "To save and quit, type ':wq'.").
+solution(howtoquit, "To quit, type ':q'. To quit without saving, type ':q!'.").
+solution(howtosplitwindow, "To split window, type ':split'.").
+solution(howtosplitwindowvertically, "To split window vertically, type ':vsplit'.").
+solution(howtosplitwindowhorizontally, "To split window horizontally, type ':hsplit'.").
 
 % Map keywords in the question to the correct attribute
 % keyword(T0,T1,Ind,C0,C1) is true if T0-T1 is a keyword that provides attributes C1-C0 to Ind
@@ -172,6 +172,10 @@ keyword([switch | T],T,Ind,C,[switch(Ind)|C]).
 % mode and modes mean the same thing
 keyword([mode | T],T,Ind,C,[mode(Ind)|C]).
 keyword([modes | T],T,Ind,C,[mode(Ind)|C]).
+% start, beginning mean the same thing
+keyword([start | T],T,Ind,C,[start(Ind)|C]).
+keyword([beginning | T],T,Ind,C,[start(Ind)|C]).
+
 
 keyword([visual | T],T,Ind,C,[visual(Ind)|C]).
 keyword([normal | T],T,Ind,C,[normal(Ind)|C]).
