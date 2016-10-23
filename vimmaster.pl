@@ -242,9 +242,19 @@ prove_all([H|T]) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% vimrc_pair(X,Y) writes property Y into .vimrc file specified by X
 vimrc_pair('line numbers', 'set number').
 vimrc_pair('syntax highlighting', 'syntax on').
 vimrc_pair('highlight search results', 'set hlsearch').
+vimrc_pair('auto indent', 'set autoindent').
+vimrc_pair('enable mouse', 'set mouse=a').
+vimrc_pair('search and replace word under cursor', ':nnoremap <Leader>s :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+').
+vimrc_pair('vim colours', 'set t_Co=256').
+vimrc_pair('80 char indicator', 'set colorcolumn=80').
+vimrc_pair('highlight current line', 'set cursorline').
+vimrc_pair('file type indentation', 'filetype indent on').
+
 
 vimrc_keywords_to_command([Str|T],T,C,[Rule|C]) :-
     vimrc_pair(Str, Rule).
